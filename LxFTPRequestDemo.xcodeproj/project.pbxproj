@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3524F0C91A538BC3006CD505 /* Little dragon female.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3524F0C81A538BC3006CD505 /* Little dragon female.jpg */; };
 		35C211C71A525177004240E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211C61A525177004240E0 /* main.m */; };
 		35C211CA1A525177004240E0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211C91A525177004240E0 /* AppDelegate.m */; };
 		35C211CD1A525177004240E0 /* LxFTPRequestDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35C211CB1A525177004240E0 /* LxFTPRequestDemo.xcdatamodeld */; };
@@ -16,6 +17,7 @@
 		35C211D81A525177004240E0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35C211D61A525177004240E0 /* LaunchScreen.xib */; };
 		35C211E41A525177004240E0 /* LxFTPRequestDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211E31A525177004240E0 /* LxFTPRequestDemoTests.m */; };
 		35C211F21A5251E3004240E0 /* LxFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211F11A5251E3004240E0 /* LxFTPRequest.m */; };
+		B25984918DCDA953EC71197F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 162F5745A9843678EDF92D13 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		162F5745A9843678EDF92D13 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C28C233CD22DE447863581D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		3524F0C81A538BC3006CD505 /* Little dragon female.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Little dragon female.jpg"; sourceTree = "<group>"; };
 		35C211C11A525177004240E0 /* LxFTPRequestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LxFTPRequestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C211C51A525177004240E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35C211C61A525177004240E0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,6 +50,7 @@
 		35C211E31A525177004240E0 /* LxFTPRequestDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LxFTPRequestDemoTests.m; sourceTree = "<group>"; };
 		35C211F01A5251E3004240E0 /* LxFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LxFTPRequest.h; path = LxFTPRequest/LxFTPRequest.h; sourceTree = "<group>"; };
 		35C211F11A5251E3004240E0 /* LxFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LxFTPRequest.m; path = LxFTPRequest/LxFTPRequest.m; sourceTree = "<group>"; };
+		F8FD69AC9AC3B14E1229DF61 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B25984918DCDA953EC71197F /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,12 +72,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27FBA0CD86A3842F5E66460E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				162F5745A9843678EDF92D13 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		35C211B81A525177004240E0 = {
 			isa = PBXGroup;
 			children = (
 				35C211C31A525177004240E0 /* LxFTPRequestDemo */,
 				35C211E01A525177004240E0 /* LxFTPRequestDemoTests */,
 				35C211C21A525177004240E0 /* Products */,
+				F006420F9CE33D6092196328 /* Pods */,
+				27FBA0CD86A3842F5E66460E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,9 +108,10 @@
 				35C211C91A525177004240E0 /* AppDelegate.m */,
 				35C211CE1A525177004240E0 /* ViewController.h */,
 				35C211CF1A525177004240E0 /* ViewController.m */,
-				35C211D11A525177004240E0 /* Main.storyboard */,
 				35C211D41A525177004240E0 /* Images.xcassets */,
+				35C211D11A525177004240E0 /* Main.storyboard */,
 				35C211D61A525177004240E0 /* LaunchScreen.xib */,
+				3524F0C81A538BC3006CD505 /* Little dragon female.jpg */,
 				35C211CB1A525177004240E0 /* LxFTPRequestDemo.xcdatamodeld */,
 				35C211C41A525177004240E0 /* Supporting Files */,
 			);
@@ -135,6 +153,15 @@
 			name = LxFTPRequest;
 			sourceTree = "<group>";
 		};
+		F006420F9CE33D6092196328 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2C28C233CD22DE447863581D /* Pods.debug.xcconfig */,
+				F8FD69AC9AC3B14E1229DF61 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,9 +169,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 35C211E71A525177004240E0 /* Build configuration list for PBXNativeTarget "LxFTPRequestDemo" */;
 			buildPhases = (
+				6D44F7CF9F315B92DDE083BA /* Check Pods Manifest.lock */,
 				35C211BD1A525177004240E0 /* Sources */,
 				35C211BE1A525177004240E0 /* Frameworks */,
 				35C211BF1A525177004240E0 /* Resources */,
+				8007D3C9096F3C85A143DD74 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -215,6 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3524F0C91A538BC3006CD505 /* Little dragon female.jpg in Resources */,
 				35C211D31A525177004240E0 /* Main.storyboard in Resources */,
 				35C211D81A525177004240E0 /* LaunchScreen.xib in Resources */,
 				35C211D51A525177004240E0 /* Images.xcassets in Resources */,
@@ -229,6 +259,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6D44F7CF9F315B92DDE083BA /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8007D3C9096F3C85A143DD74 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		35C211BD1A525177004240E0 /* Sources */ = {
@@ -361,6 +424,7 @@
 		};
 		35C211E81A525177004240E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2C28C233CD22DE447863581D /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = LxFTPRequestDemo/Info.plist;
@@ -371,6 +435,7 @@
 		};
 		35C211E91A525177004240E0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8FD69AC9AC3B14E1229DF61 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = LxFTPRequestDemo/Info.plist;

@@ -16,7 +16,7 @@
 - (BOOL)isValidateFTPURLString
 {
     if (self.length > 0) {
-        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Tt][Pp]://(\\w*:[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*@)?([0-9a-zA-Z]+\\.)+[0-9a-zA-Z]+(/?|((/[=_0-9a-zA-Z\\-%]+)+(\\.[_0-9a-zA-Z]+)?))$"] evaluateWithObject:self];
+        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Tt][Pp]://(\\w*(:[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*)?@)?([0-9a-zA-Z]+\\.)+[0-9a-zA-Z]+(:(6553[0-5]|655[0-2]\\d|654\\d\\d|64\\d\\d\\d|[0-5]?\\d?\\d?\\d?\\d))?(/?|((/[=_0-9a-zA-Z\\-%]+)+(/|\\.[_0-9a-zA-Z]+)?))$"] evaluateWithObject:self];
     }
     else {
         return NO;
@@ -26,7 +26,7 @@
 - (BOOL)isValidateFileURLString
 {
     if (self.length > 0) {
-        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Ii][Ll][Ee]://(/?|((/[=_0-9a-zA-Z\\-%]+)+(\\.[_0-9a-zA-Z]+)?))$"] evaluateWithObject:self];
+        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Ii][Ll][Ee]://?((/[=_0-9a-zA-Z%\\-]+(\\.[_0-9a-zA-Z]+)?)+(/|\\.[_0-9a-zA-Z]+)?)$"] evaluateWithObject:self];
     }
     else {
         return NO;
@@ -50,6 +50,42 @@
     return [self substringFromIndex:pathStartLocation];
 }
 
+- (NSString *)stringDecorateWithUsername:(NSString *)username password:(NSString *)password
+{
+    if (!self.isValidateFTPURLString) {
+        return nil;
+    }
+    else {
+        
+        BOOL usernameIslegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^\\w*$"] evaluateWithObject:username];
+        BOOL passwordIslegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*$"] evaluateWithObject:password];
+        
+        if (usernameIslegal && passwordIslegal) {
+            
+            NSString * identityString = [NSString stringWithFormat:@"%@:%@@", username, password];
+            
+            int schemeEndPosition = 0;
+            int hostBeginPosition = 0;
+            
+            for (int i = 0; i < self.length; i++) {
+                if (i > 0 && [self characterAtIndex:i-1] == (unichar)'/' && [self characterAtIndex:i] == (unichar)'/') {
+                    schemeEndPosition = i;
+                    hostBeginPosition = MIN(i+1, (int)self.length - 1);
+                }
+                if ([self characterAtIndex:i] == (unichar)'@') {
+                    hostBeginPosition = MIN(i+1, (int)self.length - 1);
+                    break;
+                }
+            }
+            
+            return [NSString stringWithFormat:@"%@%@%@", [self substringToIndex:schemeEndPosition + 1], identityString, [self substringFromIndex:hostBeginPosition]];
+        }
+        else {
+            return nil;
+        }
+    }
+}
+
 @end
 
 
@@ -65,14 +101,23 @@
 
 - (instancetype)init
 {
-    self = [super init];
-    if (self) {
+    PRINTF(@"LxFTPRequest: Can't init directly by this method!");
+    return nil;
+}
+
+- (instancetype)initPrivate
+{
+    if (self = [super init]) {
         self.username = @"";
         self.password = @"";
         self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent){};
         self.successAction = ^(Class resultClass, id result){};
         self.failAction = ^(CFStreamErrorDomain domain, NSInteger error){};
         
+        _streamClientContext.version = 0;
+        _streamClientContext.retain = NULL;
+        _streamClientContext.release = NULL;
+        _streamClientContext.copyDescription = NULL;
         _streamClientContext.info = (void *)CFBridgingRetain(self);
     }
     return self;
@@ -102,8 +147,7 @@
         }
     }
     else {
-        PRINTF_MARK(LxFTPRequest: The serverURL is not legal!);
-        _serverURL = nil;
+        PRINTF_MARK(LxFTPRequest: The serverURL is illegal!);
     }
 }
 
@@ -116,8 +160,7 @@
         }
     }
     else {
-        PRINTF_MARK(LxFTPRequest: The localFileURL is not legal!);
-        _localFileURL = nil;
+        PRINTF_MARK(LxFTPRequest: The localFileURL is illegal!);
     }
 }
 
@@ -143,9 +186,9 @@
 
 @implementation LxResourceListFTPRequest
 
-- (instancetype)init
+- (instancetype)initPrivate
 {
-    self = [super init];
+    self = [super initPrivate];
     if (self) {
         self.listData = [[NSMutableData alloc]init];
     }
@@ -204,26 +247,16 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     switch (type) {
         case kCFStreamEventNone:
         {
-            PRINTF_MARK(kCFStreamEventNone);
+
         }
             break;
         case kCFStreamEventOpenCompleted:
         {
-            PRINTF_MARK(kCFStreamEventOpenCompleted);
-            
-            CFNumberRef resourceSizeNumber = CFReadStreamCopyProperty(stream, kCFStreamPropertyFTPResourceSize);
-            
-            if (resourceSizeNumber) {
-                
-                long long resourceSize = 0;
-                CFNumberGetValue(resourceSizeNumber, kCFNumberLongLongType, &resourceSize);
-                request.fileTotalSize = (NSInteger)resourceSize;
-            }
+
         }
             break;
         case kCFStreamEventHasBytesAvailable:
         {
-            PRINTF_MARK(kCFStreamEventHasBytesAvailable);
             UInt8 buffer[RESOURCE_LIST_BUFFER_SIZE];
             CFIndex bytesRead = CFReadStreamRead(stream, buffer, RESOURCE_LIST_BUFFER_SIZE);
             
@@ -261,7 +294,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
                         [request stop];
                         return;
                     }
-                } while (1);
+                } while (true);
                 
                 request.successAction([NSArray class], [NSArray arrayWithArray:resourceArray]);
                 [request stop];
@@ -276,17 +309,19 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
             break;
         case kCFStreamEventCanAcceptBytes:
         {
-            PRINTF_MARK(kCFStreamEventCanAcceptBytes);
+
         }
             break;
         case kCFStreamEventErrorOccurred:
         {
-            PRINTF_MARK(kCFStreamEventErrorOccurred);
+            CFStreamError error = CFReadStreamGetError(stream);
+            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+            [request stop];
         }
             break;
         case kCFStreamEventEndEncountered:
         {
-            PRINTF_MARK(kCFStreamEventEndEncountered);
+            [request stop];
         }
             break;
         default:
@@ -333,6 +368,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     }
     
     self.writeStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault, (__bridge CFURLRef)self.localFileURL);
+    CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyAppendToFile, kCFBooleanTrue);
     
     Boolean openWriteStreamSuccess = CFWriteStreamOpen(self.writeStream);
     
@@ -353,8 +389,8 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPPassword, (__bridge CFTypeRef)self.password);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPAttemptPersistentConnection, kCFBooleanFalse);
-    CFReadStreamSetProperty(self.readStream, kCFStreamPropertyAppendToFile, kCFBooleanTrue);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFileCurrentOffset, (__bridge CFTypeRef)@(self.finishedSize));
+
     
     Boolean supportsAsynchronousNotification = CFReadStreamSetClient(self.readStream,
                                                                      kCFStreamEventNone|
@@ -410,6 +446,11 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
                 CFRelease(resourceSizeNumber);
                 resourceSizeNumber = nil;
             }
+            
+            if (request.finishedSize >= request.fileTotalSize) {
+                request.successAction([NSString class], request.localFileURL.absoluteString.stringByDeletingScheme);
+                [request stop];
+            }
         }
             break;
         case kCFStreamEventHasBytesAvailable:
@@ -419,7 +460,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
             
             if (bytesRead > 0) {
                 
-                NSInteger bytesOffset = request.finishedSize;
+                NSInteger bytesOffset = 0;
                 do
                 {
                     CFIndex bytesWritten = CFWriteStreamWrite(request.writeStream, &buffer[bytesOffset], bytesRead - bytesOffset);
@@ -501,7 +542,9 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
 {
     [super setLocalFileURL:localFileURL];
     
-    NSDictionary * fileAttributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.localFileURL.absoluteString.stringByDeletingScheme error:nil];
+    NSError * error = nil;
+    
+    NSDictionary * fileAttributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.localFileURL.absoluteString.stringByRemovingPercentEncoding.stringByDeletingScheme error:&error];
     self.fileTotalSize = [fileAttributes[NSFileSize] integerValue];
 }
 
@@ -516,7 +559,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     Boolean openReadStreamSuccess = CFReadStreamOpen(self.readStream);
     
     if (openReadStreamSuccess) {
-        
+
     }
     else {
         return NO;
@@ -531,6 +574,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPUserName, (__bridge CFTypeRef)self.username);
     CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPPassword, (__bridge CFTypeRef)self.password);
     CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPAttemptPersistentConnection, kCFBooleanFalse);
+//    CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
 //    CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFileCurrentOffset, <#CFTypeRef propertyValue#>)
     
     Boolean supportsAsynchronousNotification = CFWriteStreamSetClient(self.writeStream,
@@ -657,11 +701,11 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
 
 
 
-@interface LxCreateDirectoryFTPRequest : LxFTPRequest
+@interface LxCreateResourceFTPRequest : LxFTPRequest
 
 @end
 
-@implementation LxCreateDirectoryFTPRequest
+@implementation LxCreateResourceFTPRequest
 
 - (BOOL)start
 {
@@ -670,6 +714,8 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
     }
     
     self.writeStream = CFWriteStreamCreateWithFTPURL(kCFAllocatorDefault, (__bridge CFURLRef)self.serverURL);
+    CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPUserName, (__bridge CFTypeRef)self.username);
+    CFWriteStreamSetProperty(self.writeStream, kCFStreamPropertyFTPPassword, (__bridge CFTypeRef)self.password);
     
     Boolean supportsAsynchronousNotification = CFWriteStreamSetClient(self.writeStream,
                                                                       kCFStreamEventNone|
@@ -678,7 +724,7 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
                                                                       kCFStreamEventCanAcceptBytes|
                                                                       kCFStreamEventErrorOccurred|
                                                                       kCFStreamEventEndEncountered,
-                                                                      createDirectoryWriteStreamClientCallBack,
+                                                                      createResourceWriteStreamClientCallBack,
                                                                       &_streamClientContext);
     
     if (supportsAsynchronousNotification) {
@@ -700,9 +746,9 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
     return NO;
 }
 
-void createDirectoryWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
+void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
 {
-    LxCreateDirectoryFTPRequest * request = (__bridge LxCreateDirectoryFTPRequest *)clientCallBackInfo;
+    LxCreateResourceFTPRequest * request = (__bridge LxCreateResourceFTPRequest *)clientCallBackInfo;
     
     switch (type) {
         case kCFStreamEventNone:
@@ -722,7 +768,8 @@ void createDirectoryWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamE
             break;
         case kCFStreamEventCanAcceptBytes:
         {
-            
+            request.successAction([NSString class], request.serverURL.absoluteString);
+            [request stop];
         }
             break;
         case kCFStreamEventErrorOccurred:
@@ -755,11 +802,11 @@ void createDirectoryWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamE
 
 
 
-@interface LxDestoryFileFTPRequest : LxFTPRequest
+@interface LxDestoryResourceRequest : LxFTPRequest
 
 @end
 
-@implementation LxDestoryFileFTPRequest
+@implementation LxDestoryResourceRequest
 
 - (BOOL)start
 {
@@ -767,120 +814,64 @@ void createDirectoryWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamE
         return NO;
     }
     
-    self.writeStream = CFWriteStreamCreateWithFTPURL(kCFAllocatorDefault, (__bridge CFURLRef)self.serverURL);
+    NSString * theWhileServerURLString = [self.serverURL.absoluteString stringDecorateWithUsername:self.username password:self.password];
     
-    Boolean supportsAsynchronousNotification = CFWriteStreamSetClient(self.writeStream,
-                                                                      kCFStreamEventNone|
-                                                                      kCFStreamEventOpenCompleted|
-                                                                      kCFStreamEventHasBytesAvailable|
-                                                                      kCFStreamEventCanAcceptBytes|
-                                                                      kCFStreamEventErrorOccurred|
-                                                                      kCFStreamEventEndEncountered,
-                                                                      createDirectoryWriteStreamClientCallBack,
-                                                                      &_streamClientContext);
+    self.serverURL = [NSURL URLWithString:theWhileServerURLString];
     
-    if (supportsAsynchronousNotification) {
-        CFWriteStreamScheduleWithRunLoop(self.writeStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-    }
-    else {
-        return NO;
-    }
+    SInt32 errorCode = 0;
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     
-    Boolean openWriteStreamSuccess = CFURLDestroyResource((__bridge CFURLRef)self.serverURL, NULL);
+    Boolean destroyResourceSuccess = CFURLDestroyResource((__bridge CFURLRef)self.serverURL, &errorCode);
     
 #pragma clang diagnostic pop
     
-    if (openWriteStreamSuccess) {
+    if (destroyResourceSuccess) {
+        
+        self.successAction([NSString class], self.serverURL.absoluteString);
+        
         return YES;
     }
     else {
+        
+        self.failAction(0, (NSInteger)errorCode);
+        
         return NO;
     }
     
     return NO;
 }
 
-void destoryFileWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
-{
-    LxDestoryFileFTPRequest * request = (__bridge LxDestoryFileFTPRequest *)clientCallBackInfo;
-    
-    switch (type) {
-        case kCFStreamEventNone:
-        {
-            
-        }
-            break;
-        case kCFStreamEventOpenCompleted:
-        {
-            
-        }
-            break;
-        case kCFStreamEventHasBytesAvailable:
-        {
-            
-        }
-            break;
-        case kCFStreamEventCanAcceptBytes:
-        {
-            
-        }
-            break;
-        case kCFStreamEventErrorOccurred:
-        {
-            CFStreamError error = CFWriteStreamGetError(stream);
-            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
-            [request stop];
-        }
-            break;
-        case kCFStreamEventEndEncountered:
-        {
-            request.successAction([NSString class], request.serverURL.absoluteString);
-            [request stop];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)stop
-{
-    CFWriteStreamUnscheduleFromRunLoop(self.writeStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-    CFWriteStreamClose(self.writeStream);
-    CFRelease(self.writeStream);
-    self.writeStream = nil;
-}
-
 @end
+
+
 
 @implementation LxFTPRequest (Create)
 
 + (LxFTPRequest *)resourceListRequest
 {
-    return [[LxResourceListFTPRequest alloc]init];
+    return [[LxResourceListFTPRequest alloc]initPrivate];
 }
 
 + (LxFTPRequest *)downloadRequest
 {
-    return [[LxDownloadFTPRequest alloc]init];
+    return [[LxDownloadFTPRequest alloc]initPrivate];
 }
 
 + (LxFTPRequest *)uploadRequest
 {
-    return [[LxUploadFTPRequest alloc]init];
+    return [[LxUploadFTPRequest alloc]initPrivate];
 }
 
-+ (LxFTPRequest *)createDirectoryRequest
++ (LxFTPRequest *)createResourceRequest
 {
-    return [[LxCreateDirectoryFTPRequest alloc]init];
+    return [[LxCreateResourceFTPRequest alloc]initPrivate];
 }
 
-+ (LxFTPRequest *)destoryFileRequest
++ (LxFTPRequest *)destoryResourceRequest
 {
-    return [[LxDestoryFileFTPRequest alloc]init];
+    return [[LxDestoryResourceRequest alloc]initPrivate];
 }
 
 @end

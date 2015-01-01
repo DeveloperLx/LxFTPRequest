@@ -17,6 +17,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    UIView * theStatusBar = [application valueForKey:@"statusBar"];
+    theStatusBar.backgroundColor = [UIColor whiteColor];
+    
+//    [application setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
+        
+        CGRect windowFrame = self.window.frame;
+        windowFrame.origin.y = 20;
+        windowFrame.size.height = windowFrame.size.height - 20;
+        self.window.frame = windowFrame;
+    }
+    
     return YES;
 }
 
