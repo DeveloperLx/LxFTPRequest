@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35037A2E1A5D5FAF00130C31 /* LxFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 35037A2D1A5D5FAF00130C31 /* LxFTPRequest.m */; };
 		3524F0C91A538BC3006CD505 /* Little dragon female.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3524F0C81A538BC3006CD505 /* Little dragon female.jpg */; };
 		35C211C71A525177004240E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211C61A525177004240E0 /* main.m */; };
 		35C211CA1A525177004240E0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211C91A525177004240E0 /* AppDelegate.m */; };
@@ -16,7 +17,6 @@
 		35C211D51A525177004240E0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35C211D41A525177004240E0 /* Images.xcassets */; };
 		35C211D81A525177004240E0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35C211D61A525177004240E0 /* LaunchScreen.xib */; };
 		35C211E41A525177004240E0 /* LxFTPRequestDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211E31A525177004240E0 /* LxFTPRequestDemoTests.m */; };
-		35C211F21A5251E3004240E0 /* LxFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C211F11A5251E3004240E0 /* LxFTPRequest.m */; };
 		B25984918DCDA953EC71197F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 162F5745A9843678EDF92D13 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +33,8 @@
 /* Begin PBXFileReference section */
 		162F5745A9843678EDF92D13 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C28C233CD22DE447863581D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		35037A2C1A5D5FAF00130C31 /* LxFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LxFTPRequest.h; path = LxFTPRequest/LxFTPRequest.h; sourceTree = SOURCE_ROOT; };
+		35037A2D1A5D5FAF00130C31 /* LxFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LxFTPRequest.m; path = LxFTPRequest/LxFTPRequest.m; sourceTree = SOURCE_ROOT; };
 		3524F0C81A538BC3006CD505 /* Little dragon female.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Little dragon female.jpg"; sourceTree = "<group>"; };
 		35C211C11A525177004240E0 /* LxFTPRequestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LxFTPRequestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C211C51A525177004240E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,8 +50,6 @@
 		35C211DD1A525177004240E0 /* LxFTPRequestDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LxFTPRequestDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C211E21A525177004240E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35C211E31A525177004240E0 /* LxFTPRequestDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LxFTPRequestDemoTests.m; sourceTree = "<group>"; };
-		35C211F01A5251E3004240E0 /* LxFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LxFTPRequest.h; path = LxFTPRequest/LxFTPRequest.h; sourceTree = "<group>"; };
-		35C211F11A5251E3004240E0 /* LxFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LxFTPRequest.m; path = LxFTPRequest/LxFTPRequest.m; sourceTree = "<group>"; };
 		F8FD69AC9AC3B14E1229DF61 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +80,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		35037A2F1A5D5FDB00130C31 /* LxFTPRequest */ = {
+			isa = PBXGroup;
+			children = (
+				35037A2C1A5D5FAF00130C31 /* LxFTPRequest.h */,
+				35037A2D1A5D5FAF00130C31 /* LxFTPRequest.m */,
+			);
+			name = LxFTPRequest;
+			sourceTree = "<group>";
+		};
 		35C211B81A525177004240E0 = {
 			isa = PBXGroup;
 			children = (
@@ -103,7 +112,7 @@
 		35C211C31A525177004240E0 /* LxFTPRequestDemo */ = {
 			isa = PBXGroup;
 			children = (
-				35C211F31A5251F2004240E0 /* LxFTPRequest */,
+				35037A2F1A5D5FDB00130C31 /* LxFTPRequest */,
 				35C211C81A525177004240E0 /* AppDelegate.h */,
 				35C211C91A525177004240E0 /* AppDelegate.m */,
 				35C211CE1A525177004240E0 /* ViewController.h */,
@@ -142,15 +151,6 @@
 				35C211E21A525177004240E0 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		35C211F31A5251F2004240E0 /* LxFTPRequest */ = {
-			isa = PBXGroup;
-			children = (
-				35C211F01A5251E3004240E0 /* LxFTPRequest.h */,
-				35C211F11A5251E3004240E0 /* LxFTPRequest.m */,
-			);
-			name = LxFTPRequest;
 			sourceTree = "<group>";
 		};
 		F006420F9CE33D6092196328 /* Pods */ = {
@@ -299,7 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35C211CA1A525177004240E0 /* AppDelegate.m in Sources */,
-				35C211F21A5251E3004240E0 /* LxFTPRequest.m in Sources */,
+				35037A2E1A5D5FAF00130C31 /* LxFTPRequest.m in Sources */,
 				35C211C71A525177004240E0 /* main.m in Sources */,
 				35C211D01A525177004240E0 /* ViewController.m in Sources */,
 				35C211CD1A525177004240E0 /* LxFTPRequestDemo.xcdatamodeld in Sources */,

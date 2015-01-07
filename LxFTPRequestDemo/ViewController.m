@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "LxFTPRequest/LxFTPRequest.h"
+#import "LxFTPRequest.h"
 #import <JGProgressHUD/JGProgressHUD.h>
 #import <JGProgressHUD/JGProgressHUDPieIndicatorView.h>
 
-//#error Configurate ftp address、uesrname、password
+#error Configurate Ftp address、uesrname、password
 
 #define FTP_ADDRESS_SAMPLE    @""
 #define USERNAME_SAMPLE       @""
