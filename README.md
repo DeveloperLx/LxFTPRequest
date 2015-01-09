@@ -16,7 +16,7 @@ Support
 How to use
 -----------
         #import "LxFTPRequest.h"
-Get resource list:
+###Get resource list:
 
             LxFTPRequest * request = [LxFTPRequest resourceListRequest];
             request.serverURL = [[NSURL URLWithString:FTP_SCHEME_HOST]URLByAppendingPathComponent:SUB_DIRECTORY];
@@ -40,9 +40,9 @@ Get resource list:
 ###Download resource:
 
         /**
-	To implement breakpoint continuingly, you only need to guarantee the file downloaded part has not been modified in any way, the ftp server support breakpoint continuingly and the file on server not change. The download will continue from last time progress.
-        If you want to download resource from begin, you must delete the local downloaded part.
-        [[NSFileManager defaultManager]removeItemAtPath:LOCAL_FILE_PATH error:&error];
+            To implement breakpoint continuingly, you only need to guarantee the file downloaded part has not been modified in any way, the ftp server support breakpoint continuingly and the file on server not change. The download will continue from last time progress.
+            If you want to download resource from begin, you must delete the local downloaded part.
+            [[NSFileManager defaultManager]removeItemAtPath:LOCAL_FILE_PATH error:&error];
         */
 
             LxFTPRequest * request = [LxFTPRequest downloadRequest];
@@ -105,7 +105,7 @@ Get resource list:
 ###Delete file or directory on ftp server:
 
         /**
-    	The directory which is not empty CANNOT BE DELETED !!!
+            The directory which is not empty CANNOT BE DELETED !!!
         */
 
             LxFTPRequest * request = [LxFTPRequest destoryResourceRequest];
