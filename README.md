@@ -5,12 +5,13 @@ Installation
 Only need add LxFTPRequest.h and LxFTPRequest.m to your project.
 Introduction
 ------------
-###A convenient FTP Request library. Support progress tracking, Breakpoint continuingly etc.
-###Support FTP get resource list, download file, update file, create directory or file, delete directory or file etc.
-###Support progress tracking, Breakpoint continuingly, auto check legitimacy of ftp address and local file path functions and so on.
-###Both support iOS and Mac OS X platforms.
-###Minimum support iOS version: iOS 5.0
-###Minimum support OS X version: Mac OS X 10.7
+        A convenient FTP Request library. Support progress tracking, Breakpoint continuingly etc.
+        Support FTP get resource list, download file, update file, create directory or file, delete directory or file etc.
+        Support progress tracking, Breakpoint continuingly, auto check legitimacy of ftp address and local file path functions and so on.
+Support
+        Both support iOS and Mac OS X platforms.
+        Minimum support iOS version: iOS 5.0
+        Minimum support OS X version: Mac OS X 10.7
 Demo 必须正确地配置CocoaPods及FTP地址、用户名、密码后，方可使用
 -----------
 How to use
