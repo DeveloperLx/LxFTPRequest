@@ -1,9 +1,5 @@
 //
 //  AppDelegate.m
-//  LxFTPRequestDemo
-//
-//  Created by Gener-health-li.x on 14/12/30.
-//  Copyright (c) 2014年 Gener-health-li.x. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -20,9 +16,7 @@
     
     UIView * theStatusBar = [application valueForKey:@"statusBar"];
     theStatusBar.backgroundColor = [UIColor whiteColor];
-    
-//    [application setStatusBarStyle:UIStatusBarStyleLightContent];
-    
+        
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         
         CGRect windowFrame = self.window.frame;

@@ -1,9 +1,5 @@
 //
 //  LxFTPRequest.m
-//  FTPDemo
-//
-//  Created by Gener-health-li.x on 14/12/23.
-//  Copyright (c) 2014年 Gener-health-li.x. All rights reserved.
 //
 
 #import "LxFTPRequest.h"

@@ -1,9 +1,5 @@
 //
 //  LxFTPRequest.h
-//  FTPDemo
-//
-//  Created by Gener-health-li.x on 14/12/23.
-//  Copyright (c) 2014年 Gener-health-li.x. All rights reserved.
 //
 
 /*
@@ -136,12 +132,11 @@
 /*
  Need to improve：
  
-    1.Can't delete empty diretory
+    1.Can't delete not empty diretory
     2.Can't identify illegal IP FTP address
     3.Rename resources
-    4.Instructions
-    5.CocoaPods
-    6.Multithreading
+    4.CocoaPods
+    5.Multithreading
  */
 
 #import <Foundation/Foundation.h>

@@ -11,11 +11,11 @@
 #import <JGProgressHUD/JGProgressHUD.h>
 #import <JGProgressHUD/JGProgressHUDPieIndicatorView.h>
 
-#error Configurate Ftp address、uesrname、password
+#error ------   Configurate your Ftp address、uesrname、password  ------
 
-#define FTP_ADDRESS_SAMPLE    @""
-#define USERNAME_SAMPLE       @""
-#define PASSWORD_SAMPLE       @""
+#define FTP_ADDRESS    @"ftp://"
+#define USERNAME       @"anonymous"
+#define PASSWORD       @""
 
 @interface ViewController () <UITableViewDataSource,UITableViewDelegate>
 
@@ -32,9 +32,7 @@
     [super viewDidLoad];
 
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    
-    NSLog(@"SandBox = %@", NSHomeDirectory());//
-    
+        
     self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -101,9 +99,9 @@
         case 0:
         {
             LxFTPRequest * request = [LxFTPRequest resourceListRequest];
-            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS_SAMPLE]URLByAppendingPathComponent:@""];
-            request.username = USERNAME_SAMPLE;
-            request.password = PASSWORD_SAMPLE;
+            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS]URLByAppendingPathComponent:@""];
+            request.username = USERNAME;
+            request.password = PASSWORD;
             request.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent) {
             
                 NSLog(@"totalSize = %ld, finishedSize = %ld, finishedPercent = %f", totalSize, finishedSize, finishedPercent);  //
@@ -136,10 +134,10 @@
         case 1:
         {
             LxFTPRequest * request = [LxFTPRequest downloadRequest];
-            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS_SAMPLE]URLByAppendingPathComponent:@"xxx.zip"];
+            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS]URLByAppendingPathComponent:@"xxx.zip"];
             request.localFileURL = [[NSURL fileURLWithPath:NSHomeDirectory()]URLByAppendingPathComponent:@"Documents/downloadedFTPFile"];
-            request.username = USERNAME_SAMPLE;
-            request.password = PASSWORD_SAMPLE;
+            request.username = USERNAME;
+            request.password = PASSWORD;
             request.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent) {
                 
                 NSLog(@"totalSize = %ld, finishedSize = %ld, finishedPercent = %f", totalSize, finishedSize, finishedPercent);  //
@@ -169,11 +167,11 @@
         case 2:
         {
             LxFTPRequest * request = [LxFTPRequest uploadRequest];
-            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS_SAMPLE]URLByAppendingPathComponent:@"Little dragon female.jpg"];
+            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS]URLByAppendingPathComponent:@"Little dragon female.jpg"];
             NSString * localFilePath = [[NSBundle mainBundle]pathForResource:@"Little dragon female" ofType:@"jpg"];
             request.localFileURL = [NSURL fileURLWithPath:localFilePath];
-            request.username = USERNAME_SAMPLE;
-            request.password = PASSWORD_SAMPLE;
+            request.username = USERNAME;
+            request.password = PASSWORD;
             request.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent) {
                 
                 NSLog(@"totalSize = %ld, finishedSize = %ld, finishedPercent = %f", totalSize, finishedSize, finishedPercent);  //
@@ -203,9 +201,9 @@
         case 3:
         {
             LxFTPRequest * request = [LxFTPRequest createResourceRequest];
-            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS_SAMPLE]URLByAppendingPathComponent:@"newDir/"];
-            request.username = USERNAME_SAMPLE;
-            request.password = PASSWORD_SAMPLE;
+            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS]URLByAppendingPathComponent:@"newDir/"];
+            request.username = USERNAME;
+            request.password = PASSWORD;
             request.successAction = ^(Class resultClass, id result) {
                 
                 [self showMessage:result];
@@ -220,9 +218,9 @@
         case 4:
         {
             LxFTPRequest * request = [LxFTPRequest destoryResourceRequest];
-            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS_SAMPLE]URLByAppendingPathComponent:@"newDir/"];
-            request.username = USERNAME_SAMPLE;
-            request.password = PASSWORD_SAMPLE;
+            request.serverURL = [[NSURL URLWithString:FTP_ADDRESS]URLByAppendingPathComponent:@"newDir/"];
+            request.username = USERNAME;
+            request.password = PASSWORD;
             request.successAction = ^(Class resultClass, id result) {
                 
                 [self showMessage:result];
