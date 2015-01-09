@@ -16,7 +16,7 @@
     
     UIView * theStatusBar = [application valueForKey:@"statusBar"];
     theStatusBar.backgroundColor = [UIColor whiteColor];
-        
+    
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         
         CGRect windowFrame = self.window.frame;
