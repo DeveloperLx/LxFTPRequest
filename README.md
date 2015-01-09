@@ -6,8 +6,10 @@ Only need add LxFTPRequest.h and LxFTPRequest.m to your project.
 Introduction
 ------------
         A convenient FTP Request library. Support progress tracking, Breakpoint continuingly etc.
-        Support FTP get resource list, download file, update file, create directory or file, delete directory or file etc.
-        Support progress tracking, Breakpoint continuingly, auto check legitimacy of ftp address and local file path functions and so on.
+        Support FTP get resource list, download file, update file, 
+        create directory or file, delete directory or file etc.
+        Support progress tracking, Breakpoint continuingly, 
+        auto check legitimacy of ftp address and local file path functions and so on.
 Support
 ------------
         Both support iOS and Mac OS X platforms.
@@ -40,7 +42,11 @@ How to use
 ###Download resource:
 
         /**
-            To implement breakpoint continuingly, you only need to guarantee the file downloaded part has not been modified in any way, the ftp server support breakpoint continuingly and the file on server not change. The download will continue from last time progress.
+            To implement breakpoint continuingly, you only need to guarantee
+            the file downloaded part has not been modified in any way, 
+            the ftp server support breakpoint continuingly
+            and the file on server not change. 
+            The download will continue from last time progress.
             If you want to download resource from begin, you must delete the local downloaded part.
             [[NSFileManager defaultManager]removeItemAtPath:LOCAL_FILE_PATH error:&error];
         */
@@ -89,7 +95,7 @@ How to use
 ###Create file or directory on ftp server:
 
             LxFTPRequest * request = [LxFTPRequest createResourceRequest];
-            request.serverURL = [NSURL URLWithString:FTP_RESOURCE_PATH];	// directory path should be end up with '/'
+            request.serverURL = [NSURL URLWithString:FTP_RESOURCE_PATH];    // directory path should be end up with '/'
             request.username = USERNAME;
             request.password = PASSWORD;
             request.successAction = ^(Class resultClass, id result) {
