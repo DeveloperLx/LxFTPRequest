@@ -46,8 +46,8 @@ How to use
             the file downloaded part has not been modified in any way, 
             the ftp server support breakpoint continuingly
             and the file on server not change. 
-            The download will continue from last time progress.
-            If you want to download resource from begin, you must delete the local downloaded part.
+            The download will continue from the last time progress.
+            If you want to download resource from begin, you should delete the local downloaded part.
             [[NSFileManager defaultManager]removeItemAtPath:LOCAL_FILE_PATH error:&error];
         */
 
