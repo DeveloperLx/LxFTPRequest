@@ -67,7 +67,7 @@
      332 Need account for login.
      需要登陆的账户
      -----------------------------------
-     350 Requested file action pending further information
+     350 Requested file action pending further information.
      对被请求文件的操作需要进一步更多的信息
      -----------------------------------
      421 Service not available, closing control connection.This may be a reply to any command if the service knows it must shut down.
@@ -118,7 +118,7 @@
      552 Requested file action aborted. Exceeded storage allocation (for current directory or dataset).
      对请求文件的操作中止。 超出存储分配
      -----------------------------------
-     553 Requested action not taken. File name not allowed
+     553 Requested action not taken. File name not allowed.
      请求操作未被执行。 文件名不允许
      -----------------------------------
      ----------------------------------- 
@@ -129,14 +129,14 @@
      5开头－－服务器问题
  */
 
-/*
+/**
  Need to improve：
  
-    1.Can't delete not empty diretory
+    1.Can't delete not empty diretory directly
     2.Can't identify illegal IP FTP address
     3.Rename resources
-    4.CocoaPods
-    5.Multithreading
+    4.CocoaPods install support
+    5.Multithreading Queue
  */
 
 #import <Foundation/Foundation.h>
@@ -170,7 +170,9 @@
 
 @property (nonatomic,copy) void (^progressAction)(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent);
 @property (nonatomic,copy) void (^successAction)(Class resultClass, id result);
-@property (nonatomic,copy) void (^failAction)(CFStreamErrorDomain domain, NSInteger error);
+@property (nonatomic,copy) void (^failAction)(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage);
+
+- (NSString *)errorMessageOfCode:(NSInteger)code;
 
 @end
 

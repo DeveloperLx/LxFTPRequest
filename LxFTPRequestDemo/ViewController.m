@@ -114,10 +114,10 @@
                 
                 [self showMessage:[NSString stringWithFormat:@"%@", resultArray]];
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage) {
             
                 [self.processingHUD dismissAnimated:YES];
-                NSLog(@"domain = %ld, error = %ld", domain, error);
+                NSLog(@"domain = %ld, error = %ld, errorMessage = %@", domain, error, errorMessage);    //
             };
             [request start];
             
@@ -147,10 +147,10 @@
                 [self.processingHUD dismissAnimated:YES];
                 [self showMessage:result];
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage) {
                 
                 [self.processingHUD dismissAnimated:YES];
-                NSLog(@"domain = %ld, error = %ld", domain, error);
+                NSLog(@"domain = %ld, error = %ld, errorMessage = %@", domain, error, errorMessage);    //
             };
             [request start];
             
@@ -181,10 +181,10 @@
                 [self.processingHUD dismissAnimated:YES];
                 [self showMessage:result];
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage) {
                 
                 [self.processingHUD dismissAnimated:YES];
-                NSLog(@"domain = %ld, error = %ld", domain, error);
+                NSLog(@"domain = %ld, error = %ld, errorMessage = %@", domain, error, errorMessage);    //
             };
             [request start];
             
@@ -204,9 +204,9 @@
                 
                 [self showMessage:result];
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage) {
                 
-                NSLog(@"domain = %ld, error = %ld", domain, error);
+                NSLog(@"domain = %ld, error = %ld, errorMessage = %@", domain, error, errorMessage);    //
             };
             [request start];
         }
@@ -221,9 +221,9 @@
                 
                 [self showMessage:result];
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage) {
                 
-                NSLog(@"domain = %ld, error = %ld", domain, error);
+                NSLog(@"domain = %ld, error = %ld, errorMessage = %@", domain, error, errorMessage);    //
             };
             [request start];
         }

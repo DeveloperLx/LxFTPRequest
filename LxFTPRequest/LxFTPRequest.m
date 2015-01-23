@@ -108,7 +108,7 @@
         self.password = @"";
         self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent){};
         self.successAction = ^(Class resultClass, id result){};
-        self.failAction = ^(CFStreamErrorDomain domain, NSInteger error){};
+        self.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage){};
         
         _streamClientContext.version = 0;
         _streamClientContext.retain = NULL;
@@ -168,6 +168,132 @@
 - (void)stop
 {
 
+}
+
+- (NSString *)errorMessageOfCode:(NSInteger)code
+{
+    switch (code) {
+        case 110:
+            return @"Restart marker reply. In this case, the text is exact and not left to the particular implementation; it must read: MARK yyyy = mmmm where yyyy is User-process data stream marker, and mmmm server's equivalent marker (note the spaces between markers and \"=\").";
+            break;
+        case 120:
+            return @"Service ready in nnn minutes.";
+            break;
+        case 125:
+            return @"Data connection already open; transfer starting.";
+            break;
+        case 150:
+            return @"File status okay; about to open data connection.";
+            break;
+        case 200:
+            return @"Command okay.";
+            break;
+        case 202:
+            return @"Command not implemented, superfluous at this site.";
+            break;
+        case 211:
+            return @"System status, or system help reply.";
+            break;
+        case 212:
+            return @"Directory status.";
+            break;
+        case 213:
+            return @"File status.";
+            break;
+        case 214:
+            return @"Help message.On how to use the server or the meaning of a particular non-standard command. This reply is useful only to the human user.";
+            break;
+        case 215:
+            return @"NAME system type. Where NAME is an official system name from the list in the Assigned Numbers document.";
+            break;
+        case 220:
+            return @"Service ready for new user.";
+            break;
+        case 221:
+            return @"Service closing control connection.";
+            break;
+        case 225:
+            return @"Data connection open; no transfer in progress.";
+            break;
+        case 226:
+            return @"Closing data connection. Requested file action successful (for example, file transfer or file abort).";
+            break;
+        case 227:
+            return @"Entering Passive Mode.";
+            break;
+        case 230:
+            return @"User logged in, proceed. Logged out if appropriate.";
+            break;
+        case 250:
+            return @"Requested file action okay, completed.";
+            break;
+        case 257:
+            return @"\"PATHNAME\" created.";
+            break;
+        case 331:
+            return @"User name okay, need password.";
+            break;
+        case 332:
+            return @"Need account for login.";
+            break;
+        case 350:
+            return @"Requested file action pending further information.";
+            break;
+        case 421:
+            return @"Service not available, closing control connection.This may be a reply to any command if the service knows it must shut down.";
+            break;
+        case 425:
+            return @"Can't open data connection.";
+            break;
+        case 426:
+            return @"Connection closed; transfer aborted.";
+            break;
+        case 450:
+            return @"Requested file action not taken.";
+            break;
+        case 451:
+            return @"Requested action aborted. Local error in processing.";
+            break;
+        case 452:
+            return @"Requested action not taken. Insufficient storage space in system.File unavailable (e.g., file busy).";
+            break;
+        case 500:
+            return @"Syntax error, command unrecognized. This may include errors such as command line too long.";
+            break;
+        case 501:
+            return @"Syntax error in parameters or arguments.";
+            break;
+        case 502:
+            return @"Command not implemented.";
+            break;
+        case 503:
+            return @"Bad sequence of commands.";
+            break;
+        case 504:
+            return @"Command not implemented for that parameter.";
+            break;
+        case 530:
+            return @"Not logged in.";
+            break;
+        case 532:
+            return @"Need account for storing files.";
+            break;
+        case 550:
+            return @"Requested action not taken. File unavailable (e.g., file not found, no access).";
+            break;
+        case 551:
+            return @"Requested action aborted. Page type unknown.";
+            break;
+        case 552:
+            return @"Requested file action aborted. Exceeded storage allocation (for current directory or dataset).";
+            break;
+        case 553:
+            return @"Requested action not taken. File name not allowed.";
+            break;
+        default:
+            return @"Unknown";
+            break;
+    }
 }
 
 @end
@@ -286,7 +412,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
                     }
                     else if (bytesParsed == -1) {
                         CFStreamError error = CFReadStreamGetError(stream);
-                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                         [request stop];
                         return;
                     }
@@ -297,7 +423,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
             }
             else {
                 CFStreamError error = CFReadStreamGetError(stream);
-                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                 [request stop];
             }
             
@@ -311,7 +437,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
         case kCFStreamEventErrorOccurred:
         {
             CFStreamError error = CFReadStreamGetError(stream);
-            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
             [request stop];
         }
             break;
@@ -470,7 +596,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
                     }
                     else {
                         CFStreamError error = CFReadStreamGetError(stream);
-                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                         [request stop];
                         return;
                     }
@@ -484,7 +610,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
             }
             else {
                 CFStreamError error = CFReadStreamGetError(stream);
-                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                 [request stop];
             }
         }
@@ -497,7 +623,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
         case kCFStreamEventErrorOccurred:
         {
             CFStreamError error = CFReadStreamGetError(stream);
-            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
             [request stop];
         }
             break;
@@ -645,7 +771,7 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
                     }
                     else {
                         CFStreamError error = CFWriteStreamGetError(stream);
-                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                        request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                         [request stop];
                         return;
                     }
@@ -657,7 +783,7 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
             }
             else {
                 CFStreamError error = CFWriteStreamGetError(stream);
-                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+                request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
                 [request stop];
             }
         }
@@ -665,7 +791,7 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
         case kCFStreamEventErrorOccurred:
         {
             CFStreamError error = CFWriteStreamGetError(stream);
-            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
             [request stop];
         }
             break;
@@ -771,7 +897,7 @@ void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEv
         case kCFStreamEventErrorOccurred:
         {
             CFStreamError error = CFWriteStreamGetError(stream);
-            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error);
+            request.failAction((CFStreamErrorDomain)error.domain, (NSInteger)error.error, [request errorMessageOfCode:error.error]);
             [request stop];
         }
             break;
@@ -831,7 +957,7 @@ void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEv
     }
     else {
         
-        self.failAction(0, (NSInteger)errorCode);
+        self.failAction(0, (NSInteger)errorCode, @"Unknown");
         
         return NO;
     }
