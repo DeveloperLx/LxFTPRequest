@@ -130,4 +130,7 @@ How to use
 Be careful            
 -----------
 Demo 必须正确地配置CocoaPods及FTP地址、用户名、密码后，方可使用
+License
+-----------
+AFNetworking is available under the Apache License 2.0. See the LICENSE file for more info.
 
