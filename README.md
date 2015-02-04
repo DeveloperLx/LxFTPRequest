@@ -129,8 +129,8 @@ How to use
             [request start];
 Be careful            
 -----------
-Demo 必须正确地配置CocoaPods及FTP地址、用户名、密码后，方可使用
+Demo must config CocoaPods, FTP address, username, password to use.
 License
 -----------
-AFNetworking is available under the Apache License 2.0. See the LICENSE file for more info.
+LxFTPRequest is available under the Apache License 2.0. See the LICENSE file for more info.
 
