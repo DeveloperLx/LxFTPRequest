@@ -1,11 +1,13 @@
 //
 //  LxFTPRequest.m
+//  LxFTPRequestDemo
 //
 
 #import "LxFTPRequest.h"
 
-#define PRINTF_MARK(x) printf("%s\n",#x)
-#define PRINTF(fmt, ...)    printf("%s\n",[[NSString stringWithFormat:fmt,##__VA_ARGS__]UTF8String])
+static NSInteger const RESOURCE_LIST_BUFFER_SIZE = 1024;
+static NSInteger const DOWNLOAD_BUFFER_SIZE = 1024;
+static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 
 @implementation NSString (ftp)
 
@@ -87,37 +89,16 @@
 
 
 @interface LxFTPRequest ()
-
+{
+@protected
+    CFStreamClientContext _streamClientContext;
+}
 @property (nonatomic,assign) CFReadStreamRef readStream;
 @property (nonatomic,assign) CFWriteStreamRef writeStream;
 
 @end
 
 @implementation LxFTPRequest
-
-- (instancetype)init
-{
-    PRINTF(@"LxFTPRequest: Can't init directly by this method!");
-    return nil;
-}
-
-- (instancetype)initPrivate
-{
-    if (self = [super init]) {
-        self.username = @"";
-        self.password = @"";
-        self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent){};
-        self.successAction = ^(Class resultClass, id result){};
-        self.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString * errorMessage){};
-        
-        _streamClientContext.version = 0;
-        _streamClientContext.retain = NULL;
-        _streamClientContext.release = NULL;
-        _streamClientContext.copyDescription = NULL;
-        _streamClientContext.info = (void *)CFBridgingRetain(self);
-    }
-    return self;
-}
 
 - (void)dealloc
 {
@@ -126,12 +107,29 @@
     self.username = nil;
     self.password = nil;
     self.finishedSize = 0;
-    self.fileTotalSize = 0;
+    self.totalSize = 0;
     self.progressAction = nil;
     self.successAction = nil;
     self.failAction = nil;
-    self.readStream = nil;
-    self.writeStream = nil;
+}
+
+- (instancetype)initPrivate
+{
+    if (self = [super init]) {
+        
+        self.username = @"";
+        self.password = @"";
+        self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent){};
+        self.successAction = ^(Class resultClass, id result){};
+        self.failAction = ^(CFStreamErrorDomain errorDomain, NSInteger error, NSString * errorDescription){};
+        
+        _streamClientContext.version = 0;
+        _streamClientContext.retain = 0;
+        _streamClientContext.release = 0;
+        _streamClientContext.copyDescription = 0;
+        _streamClientContext.info = (void *)CFBridgingRetain(self);
+    }
+    return self;
 }
 
 - (void)setServerURL:(NSURL *)serverURL
@@ -143,7 +141,7 @@
         }
     }
     else {
-        PRINTF_MARK(LxFTPRequest: The serverURL is illegal!);
+        NSLog(@"LxFTPRequest: The serverURL is illegal!");
     }
 }
 
@@ -156,7 +154,7 @@
         }
     }
     else {
-        PRINTF_MARK(LxFTPRequest: The localFileURL is illegal!);
+        NSLog(@"LxFTPRequest: The localFileURL is illegal!");
     }
 }
 
@@ -167,7 +165,7 @@
 
 - (void)stop
 {
-
+    
 }
 
 - (NSString *)errorMessageOfCode:(NSInteger)code
@@ -298,8 +296,6 @@
 
 @end
 
-
-
 @interface LxResourceListFTPRequest : LxFTPRequest
 
 @property (nonatomic,strong) NSMutableData * listData;
@@ -308,10 +304,9 @@
 
 @implementation LxResourceListFTPRequest
 
-- (instancetype)initPrivate
+- (instancetype)init
 {
-    self = [super initPrivate];
-    if (self) {
+    if (self = [super initPrivate]) {
         self.listData = [[NSMutableData alloc]init];
     }
     return self;
@@ -331,15 +326,15 @@
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPAttemptPersistentConnection, kCFBooleanFalse);
     
     Boolean supportsAsynchronousNotification = CFReadStreamSetClient(
-                                                 self.readStream,
-                                                 kCFStreamEventNone|
-                                                 kCFStreamEventOpenCompleted|
-                                                 kCFStreamEventHasBytesAvailable|
-                                                 kCFStreamEventCanAcceptBytes|
-                                                 kCFStreamEventErrorOccurred|
-                                                 kCFStreamEventEndEncountered,
-                                                 resourceListReadStreamClientCallBack,
-                                                 &_streamClientContext);
+                                                                     self.readStream,
+                                                                     kCFStreamEventNone|
+                                                                     kCFStreamEventOpenCompleted|
+                                                                     kCFStreamEventHasBytesAvailable|
+                                                                     kCFStreamEventCanAcceptBytes|
+                                                                     kCFStreamEventErrorOccurred|
+                                                                     kCFStreamEventEndEncountered,
+                                                                     resourceListReadStreamClientCallBack,
+                                                                     &_streamClientContext);
     
     if (supportsAsynchronousNotification) {
         
@@ -358,7 +353,7 @@
     else {
         return NO;
     }
-
+    
     return NO;
 }
 
@@ -369,12 +364,12 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     switch (type) {
         case kCFStreamEventNone:
         {
-
+            
         }
             break;
         case kCFStreamEventOpenCompleted:
         {
-
+            
         }
             break;
         case kCFStreamEventHasBytesAvailable:
@@ -396,9 +391,9 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
                 do
                 {
                     CFIndex bytesParsed = CFFTPCreateParsedResourceListing(kCFAllocatorDefault,
-                                                                     &((const uint8_t *)request.listData.bytes)[totalBytesParsed],
-                                                                     request.listData.length - totalBytesParsed,
-                                                                     &parsedDictionary);
+                                                                           &((const uint8_t *)request.listData.bytes)[totalBytesParsed],
+                                                                           request.listData.length - totalBytesParsed,
+                                                                           &parsedDictionary);
                     if (bytesParsed > 0) {
                         if (parsedDictionary != NULL) {
                             [resourceArray addObject:(__bridge id)parsedDictionary];
@@ -431,7 +426,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
             break;
         case kCFStreamEventCanAcceptBytes:
         {
-
+            
         }
             break;
         case kCFStreamEventErrorOccurred:
@@ -512,7 +507,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPAttemptPersistentConnection, kCFBooleanFalse);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFileCurrentOffset, (__bridge CFTypeRef)@(self.finishedSize));
-
+    
     
     Boolean supportsAsynchronousNotification = CFReadStreamSetClient(self.readStream,
                                                                      kCFStreamEventNone|
@@ -563,13 +558,13 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
                 
                 long long resourceSize = 0;
                 CFNumberGetValue(resourceSizeNumber, kCFNumberLongLongType, &resourceSize);
-                request.fileTotalSize = (NSInteger)resourceSize;
+                request.totalSize = (NSInteger)resourceSize;
                 
                 CFRelease(resourceSizeNumber);
                 resourceSizeNumber = nil;
             }
             
-            if (request.finishedSize >= request.fileTotalSize) {
+            if (request.finishedSize >= request.totalSize) {
                 request.successAction([NSString class], request.localFileURL.absoluteString.stringByDeletingScheme);
                 [request stop];
             }
@@ -589,7 +584,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
                     if (bytesWritten > 0) {
                         bytesOffset += bytesWritten;
                         request.finishedSize += bytesWritten;
-                        request.progressAction(request.fileTotalSize, request.finishedSize, (CGFloat)request.finishedSize/(CGFloat)request.fileTotalSize * 100);
+                        request.progressAction(request.totalSize, request.finishedSize, (CGFloat)request.finishedSize/(CGFloat)request.totalSize * 100);
                     }
                     else if (bytesWritten == 0) {
                         break;
@@ -667,7 +662,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     NSError * error = nil;
     
     NSDictionary * fileAttributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.localFileURL.absoluteString.stringByRemovingPercentEncoding.stringByDeletingScheme error:&error];
-    self.fileTotalSize = [fileAttributes[NSFileSize] integerValue];
+    self.totalSize = [fileAttributes[NSFileSize] integerValue];
 }
 
 - (BOOL)start
@@ -681,7 +676,7 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     Boolean openReadStreamSuccess = CFReadStreamOpen(self.readStream);
     
     if (openReadStreamSuccess) {
-
+        
     }
     else {
         return NO;
@@ -737,12 +732,12 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
     switch (type) {
         case kCFStreamEventNone:
         {
-        
+            
         }
             break;
         case kCFStreamEventOpenCompleted:
         {
-
+            
         }
             break;
         case kCFStreamEventHasBytesAvailable:
@@ -764,7 +759,7 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
                     if (bytesWritten > 0) {
                         bytesOffset += bytesWritten;
                         request.finishedSize += bytesWritten;
-                        request.progressAction(request.fileTotalSize, request.finishedSize, (CGFloat)request.finishedSize/(CGFloat)request.fileTotalSize * 100);
+                        request.progressAction(request.totalSize, request.finishedSize, (CGFloat)request.finishedSize/(CGFloat)request.totalSize * 100);
                     }
                     else if (bytesWritten == 0) {
                         break;
@@ -875,7 +870,7 @@ void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEv
     switch (type) {
         case kCFStreamEventNone:
         {
-        
+            
         }
             break;
         case kCFStreamEventOpenCompleted:
@@ -944,21 +939,17 @@ void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEv
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    
     Boolean destroyResourceSuccess = CFURLDestroyResource((__bridge CFURLRef)self.serverURL, &errorCode);
-    
 #pragma clang diagnostic pop
     
     if (destroyResourceSuccess) {
         
         self.successAction([NSString class], self.serverURL.absoluteString);
-        
         return YES;
     }
     else {
         
         self.failAction(0, (NSInteger)errorCode, @"Unknown");
-        
         return NO;
     }
     

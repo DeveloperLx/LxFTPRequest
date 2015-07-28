@@ -129,7 +129,7 @@ How to use
             [request start];
 Be careful            
 -----------
-Demo must config CocoaPods, FTP address, username, password to use.
+Demo must config FTP address, username, password correctly.
 License
 -----------
 LxFTPRequest is available under the Apache License 2.0. See the LICENSE file for more info.
