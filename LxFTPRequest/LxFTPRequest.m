@@ -33,19 +33,9 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 
 - (NSString *)stringByDeletingScheme
 {
-    int pathStartLocation = 0;
-    for (int i = 0; i < self.length; i++) {
-        if ([self characterAtIndex:i] == (unichar)':') {
-            for (int j = i; j < self.length; j++) {
-                if ([self characterAtIndex:j] == (unichar)'/' && (j == self.length - 1 || [self characterAtIndex:j + 1] != (unichar)'/')) {
-                    pathStartLocation = j;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-    return [self substringFromIndex:pathStartLocation];
+    NSRange range = [self rangeOfString:@"://"];
+    
+    return [self substringFromIndex:(range.location + range.length)];
 }
 
 - (NSString *)stringDecorateWithUsername:(NSString *)username password:(NSString *)password
@@ -55,10 +45,10 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
     }
     else {
         
-        BOOL usernameIslegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^\\w*$"] evaluateWithObject:username];
-        BOOL passwordIslegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*$"] evaluateWithObject:password];
+        BOOL usernameIsLegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^\\w*$"] evaluateWithObject:username];
+        BOOL passwordIsLegal = [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*$"] evaluateWithObject:password];
         
-        if (usernameIslegal && passwordIslegal) {
+        if (usernameIsLegal && passwordIsLegal) {
             
             NSString * identityString = [NSString stringWithFormat:@"%@:%@@", username, password];
             
@@ -353,8 +343,6 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
     else {
         return NO;
     }
-    
-    return NO;
 }
 
 void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
@@ -536,8 +524,6 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     else {
         return NO;
     }
-    
-    return NO;
 }
 
 void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
@@ -721,8 +707,6 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     else {
         return NO;
     }
-    
-    return NO;
 }
 
 void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
@@ -859,8 +843,6 @@ void uploadWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType 
     else {
         return NO;
     }
-    
-    return NO;
 }
 
 void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEventType type, void *clientCallBackInfo)
@@ -952,8 +934,6 @@ void createResourceWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEv
         self.failAction(0, (NSInteger)errorCode, @"Unknown");
         return NO;
     }
-    
-    return NO;
 }
 
 @end
