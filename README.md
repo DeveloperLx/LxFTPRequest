@@ -15,6 +15,9 @@ Support
         Both support iOS and Mac OS X platforms.
         Minimum support iOS version: iOS 5.0
         Minimum support OS X version: Mac OS X 10.7
+Podfile
+------------
+        pod 'LxFTPRequest', '~> 1.0.0'
 How to use
 -----------
         #import "LxFTPRequest.h"
