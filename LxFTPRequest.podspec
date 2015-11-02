@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "LxFTPRequest"
   s.version      = "1.0.0"
-  s.summary      = "A convenient FTP request library for iOS and Mac OS X using Objective-C programming language. Support progress tracking, Breakpoint continuingly etc."
+  s.summary      = "A convenient FTP request library for iOS and Mac OS X. Support progress tracking, Breakpoint continuingly etc."
 
   s.homepage     = "https://github.com/DeveloperLx/LxFTPRequest"
   s.license      = 'Apache'
