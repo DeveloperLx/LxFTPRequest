@@ -294,7 +294,7 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 
 @implementation LxResourceListFTPRequest
 
-- (instancetype)init
+- (instancetype)initPrivate
 {
     if (self = [super initPrivate]) {
         self.listData = [[NSMutableData alloc]init];
