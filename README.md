@@ -36,7 +36,7 @@ How to use
                 NSArray * resultArray = (NSArray *)result;
                 NSLog(@"resultArray = %@", resultArray);  
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
             
                 NSLog(@"domain = %ld, error = %ld", domain, error);
             };
@@ -67,7 +67,7 @@ How to use
                 
                 NSLog(@"resultClass = %@, result = %@", resultClass, result);  
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
                 
                 NSLog(@"domain = %ld, error = %ld", domain, error);
             };
@@ -88,7 +88,7 @@ How to use
                 
                 NSLog(@"resultClass = %@, result = %@", resultClass, result);
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
                 
                 NSLog(@"domain = %ld, error = %ld", domain, error);
             };
@@ -105,7 +105,7 @@ How to use
                 
                 NSLog(@"resultClass = %@, result = %@", resultClass, result);
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
                 
                 NSLog(@"domain = %ld, error = %ld", domain, error);
             };
@@ -125,7 +125,7 @@ How to use
                 
                 NSLog(@"resultClass = %@, result = %@", resultClass, result);
             };
-            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error) {
+            request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
                 
                 NSLog(@"domain = %ld, error = %ld", domain, error);
             };
