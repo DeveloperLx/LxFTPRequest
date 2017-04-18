@@ -21,7 +21,7 @@ Podfile
 How to use
 -----------
         #import "LxFTPRequest.h"
-###Get resource list:
+### Get resource list:
 
             LxFTPRequest * request = [LxFTPRequest resourceListRequest];
             request.serverURL = [[NSURL URLWithString:FTP_SCHEME_HOST]URLByAppendingPathComponent:SUB_DIRECTORY];
@@ -42,7 +42,7 @@ How to use
             };
             [request start];
 
-###Download resource:
+### Download resource:
 
         /**
             To implement breakpoint continuingly, you only need to guarantee
@@ -73,7 +73,7 @@ How to use
             };
             [request start];
             
-###Upload resource:
+### Upload resource:
 
             LxFTPRequest * request = [LxFTPRequest uploadRequest];
             request.serverURL = [NSURL URLWithString:FTP_SCHEME_HOST]URLByAppendingPathComponent:FILE_PATH];
@@ -95,7 +95,7 @@ How to use
             [request start];
             
 
-###Create file or directory on ftp server:
+### Create file or directory on ftp server:
 
             LxFTPRequest * request = [LxFTPRequest createResourceRequest];
             request.serverURL = [NSURL URLWithString:FTP_RESOURCE_PATH];    // directory path should be end up with '/'
@@ -111,7 +111,7 @@ How to use
             };
             [request start];
 
-###Delete file or directory on ftp server:
+### Delete file or directory on ftp server:
 
         /**
             The directory which is not empty CANNOT BE DELETED !!!
