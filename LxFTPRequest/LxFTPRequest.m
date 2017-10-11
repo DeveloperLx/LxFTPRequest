@@ -13,7 +13,7 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 
 - (BOOL)isValidateFTPURLString {
     if (self.length > 0) {
-        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Tt][Pp]://(\\w*(:[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*)?@)?([0-9a-zA-Z]+\\.)+[0-9a-zA-Z]+(:(6553[0-5]|655[0-2]\\d|654\\d\\d|64\\d\\d\\d|[0-5]?\\d?\\d?\\d?\\d))?(/?|((/[=_0-9a-zA-Z\\-%]+)+(/|\\.[_0-9a-zA-Z]+)?))$"] evaluateWithObject:self];
+        return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[Ff][Tt][Pp]://(\\w*(:[=_0-9a-zA-Z\\$\\(\\)\\*\\+\\-\\.\\[\\]\\?\\\\\\^\\{\\}\\|`~!#%&\'\",<>/]*)?@)?([0-9a-zA-Z\\-]+\\.)+[0-9a-zA-Z]+(:(6553[0-5]|655[0-2]\\d|654\\d\\d|64\\d\\d\\d|[0-5]?\\d?\\d?\\d?\\d))?(/?|((/[=_0-9a-zA-Z\\-%]+)+(/|\\.[_0-9a-zA-Z]+)?))$"] evaluateWithObject:self];
     } else {
         return NO;
     }
@@ -29,8 +29,11 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 
 - (NSString *)stringByDeletingScheme {
     NSRange range = [self rangeOfString:@"://"];
-
-    return [self substringFromIndex:(range.location + range.length)];
+    if (range.location != NSNotFound) {
+        return [self substringFromIndex:(range.location + range.length)];
+    } else {
+        return nil;
+    }    
 }
 
 - (NSString *)stringDecorateWithUsername:(NSString *)username password:(NSString *)password {
