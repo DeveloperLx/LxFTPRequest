@@ -93,12 +93,9 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
     if (self = [super init]) {
         self.username = @"";
         self.password = @"";
-        self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent) {
-        };
-        self.successAction = ^(Class resultClass, id result) {
-        };
-        self.failAction = ^(CFStreamErrorDomain errorDomain, NSInteger error, NSString *errorDescription) {
-        };
+        self.progressAction = ^(NSInteger totalSize, NSInteger finishedSize, CGFloat finishedPercent) {};
+        self.successAction = ^(Class resultClass, id result) {};
+        self.failAction = ^(CFStreamErrorDomain errorDomain, NSInteger error, NSString *errorDescription) {};
 
         _streamClientContext.version = 0;
         _streamClientContext.retain = 0;
@@ -130,10 +127,12 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 }
 
 - (BOOL)start {
+    NSLog(@"LxFTPRequest: Need override by subclass!");
     return NO;
 }
 
 - (void)stop {
+    NSLog(@"LxFTPRequest: Need override by subclass!");
 }
 
 - (NSString *)errorMessageOfCode:(NSInteger)code {
