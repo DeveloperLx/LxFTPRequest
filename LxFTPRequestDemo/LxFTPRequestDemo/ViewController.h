@@ -7,6 +7,4 @@
 
 @interface ViewController : UIViewController
 
-
 @end
-

@@ -12,12 +12,12 @@
 #import "JGProgressHUDFadeAnimation.h"
 #import "JGProgressHUDFadeZoomAnimation.h"
 
-#import "JGProgressHUDIndicatorView.h"
 #import "JGProgressHUDErrorIndicatorView.h"
-#import "JGProgressHUDSuccessIndicatorView.h"
-#import "JGProgressHUDRingIndicatorView.h"
-#import "JGProgressHUDPieIndicatorView.h"
 #import "JGProgressHUDIndeterminateIndicatorView.h"
+#import "JGProgressHUDIndicatorView.h"
+#import "JGProgressHUDPieIndicatorView.h"
+#import "JGProgressHUDRingIndicatorView.h"
+#import "JGProgressHUDSuccessIndicatorView.h"
 
 @class JGProgressHUD;
 
@@ -79,7 +79,7 @@
  The delegate of the HUD.
  @sa JGProgressHUDDelegate.
  */
-@property (nonatomic, weak) id <JGProgressHUDDelegate> delegate;
+@property (nonatomic, weak) id<JGProgressHUDDelegate> delegate;
 
 /**
  A block to be invoked when the HUD view is tapped.
@@ -190,7 +190,7 @@
 /**
  If the HUD is visible on screen.
  */
-@property (nonatomic, assign, readonly, getter = isVisible) BOOL visible;
+@property (nonatomic, assign, readonly, getter=isVisible) BOOL visible;
 
 /**
  The progress to display using the @c progressIndicatorView. A change of this property is not animated. Use the @c setProgress:animated: method for an animated progress change.
@@ -209,7 +209,6 @@
  */
 - (void)setProgress:(float)progress animated:(BOOL)animated;
 
-
 /**
  Specifies a minimum time that the HUD will be on-screen. Useful to prevent the HUD from flashing quickly on the screen when indeterminate tasks complete more quickly than expected.
  
@@ -217,13 +216,9 @@
  */
 @property (nonatomic, assign) NSTimeInterval minimumDisplayTime;
 
-
-
-
 ////////////////
 // Presenting //
 ////////////////
-
 
 /**
  Shows the HUD animated. You should preferably show the HUD in a UIViewController's view.
@@ -253,13 +248,9 @@
  */
 - (void)showInRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
 
-
-
-
 ////////////////
 // Dismissing //
 ////////////////
-
 
 /**
  Dismisses the HUD animated.
@@ -285,10 +276,7 @@
  */
 - (void)dismissAfterDelay:(NSTimeInterval)delay animated:(BOOL)animated;
 
-
 @end
-
-
 
 @interface JGProgressHUD (HUDManagement)
 
@@ -297,7 +285,6 @@
  @return All visible progress HUDs in the view.
  */
 + (NSArray *)allProgressHUDsInView:(UIView *)view;
-
 
 /**
  @param view The view to return all visible progress HUDs for.

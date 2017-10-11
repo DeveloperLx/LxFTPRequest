@@ -14,13 +14,13 @@
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicatorView startAnimating];
     self = [super initWithContentView:activityIndicatorView];
-    
+
     if (self) {
         if (style != JGProgressHUDStyleDark) {
             self.color = [UIColor blackColor];
         }
     }
-    
+
     return self;
 }
 
@@ -33,7 +33,7 @@
 }
 
 - (void)updateAccessibility {
-    self.accessibilityLabel = NSLocalizedString(@"Indeterminate progress",);
+    self.accessibilityLabel = NSLocalizedString(@"Indeterminate progress", );
 }
 
 @end

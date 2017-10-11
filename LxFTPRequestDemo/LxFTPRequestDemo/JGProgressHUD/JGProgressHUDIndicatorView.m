@@ -4,7 +4,7 @@
 //
 //  Created by Jonas Gessner on 20.7.14.
 //  Copyright (c) 2014 Jonas Gessner. All rights reserved.
-//  
+//
 
 #import "JGProgressHUDIndicatorView.h"
 #import "JGProgressHUD.h"
@@ -38,13 +38,13 @@ NS_INLINE void runOnNextRunLoop(void (^block)(void)) {
     if (self) {
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
-        
+
         self.isAccessibilityElement = YES;
         [self setNeedsAccessibilityUpdate];
-        
+
         if (contentView) {
             _contentView = contentView;
-            
+
             [self addSubview:self.contentView];
         }
     }
@@ -62,7 +62,7 @@ NS_INLINE void runOnNextRunLoop(void (^block)(void)) {
 - (void)setNeedsAccessibilityUpdate {
     if (!_accessibilityUpdateScheduled) {
         _accessibilityUpdateScheduled = YES;
-        
+
         runOnNextRunLoop(^{
             [self updateAccessibilityIfNeeded];
         });
@@ -77,7 +77,7 @@ NS_INLINE void runOnNextRunLoop(void (^block)(void)) {
 }
 
 - (void)updateAccessibility {
-    self.accessibilityLabel = [NSLocalizedString(@"Loading",) stringByAppendingFormat:@" %.f %%", self.progress];
+    self.accessibilityLabel = [NSLocalizedString(@"Loading", ) stringByAppendingFormat:@" %.f %%", self.progress];
 }
 
 #pragma mark - Getters & Setters
@@ -90,9 +90,9 @@ NS_INLINE void runOnNextRunLoop(void (^block)(void)) {
     if (fequal(self.progress, progress)) {
         return;
     }
-    
+
     _progress = progress;
-    
+
     [self setNeedsAccessibilityUpdate];
 }
 

@@ -13,13 +13,13 @@
 
 - (instancetype)initWithContentView:(UIView *__unused)contentView {
     NSBundle *resourceBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[JGProgressHUD class]] pathForResource:@"JGProgressHUD Resources" ofType:@"bundle"]];
-    
+
     NSString *imgPath = [resourceBundle pathForResource:@"jg_hud_success" ofType:@"png"];
-    
+
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgPath]];
-    
+
     self = [super initWithContentView:imageView];
-    
+
     return self;
 }
 
@@ -28,7 +28,7 @@
 }
 
 - (void)updateAccessibility {
-    self.accessibilityLabel = NSLocalizedString(@"Success",);
+    self.accessibilityLabel = NSLocalizedString(@"Success", );
 }
 
 @end
