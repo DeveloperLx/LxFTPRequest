@@ -442,7 +442,7 @@ void resourceListReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventT
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPPassword, (__bridge CFTypeRef)self.password);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPAttemptPersistentConnection, kCFBooleanFalse);
-    CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFileCurrentOffset, (__bridge CFTypeRef) @(self.finishedSize));
+    CFReadStreamSetProperty(self.readStream, kCFStreamPropertyFTPFileTransferOffset, (__bridge CFTypeRef) @(self.finishedSize));
 
     Boolean supportsAsynchronousNotification = CFReadStreamSetClient(self.readStream,
                                                                      kCFStreamEventNone |
