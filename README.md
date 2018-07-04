@@ -27,7 +27,7 @@ How to use
         #import "LxFTPRequest.h"
 ### Get resource list:
 
-        LxFTPRequest * request = [LxFTPRequest resourceListRequest];
+        LxFTPRequest *request = [LxFTPRequest resourceListRequest];
         request.serverURL = [[NSURL URLWithString:FTP_SCHEME_HOST]URLByAppendingPathComponent:SUB_DIRECTORY];
         request.username = USERNAME;
         request.password = PASSWORD;
@@ -35,7 +35,7 @@ How to use
             NSLog(@"totalSize = %ld, finishedSize = %ld, finishedPercent = %f", totalSize, finishedSize, finishedPercent); 
         };
         request.successAction = ^(Class resultClass, id result) {
-            NSArray * resultArray = (NSArray *)result;
+            NSArray *resultArray = (NSArray *)result;
             NSLog(@"resultArray = %@", resultArray);  
         };
         request.failAction = ^(CFStreamErrorDomain domain, NSInteger error, NSString *errorMessage) {
@@ -55,7 +55,7 @@ How to use
             [[NSFileManager defaultManager]removeItemAtPath:LOCAL_FILE_PATH error:&error];
         */
 
-        LxFTPRequest * request = [LxFTPRequest downloadRequest];
+        LxFTPRequest *request = [LxFTPRequest downloadRequest];
         request.serverURL = [NSURL URLWithString:FTP_RESOURCE_ADDRESS];
         request.localFileURL = [NSURL fileURLWithPath:LOCAL_FILE_PATH];
         request.username = USERNAME;
@@ -73,7 +73,7 @@ How to use
             
 ### Upload resource:
 
-        LxFTPRequest * request = [LxFTPRequest uploadRequest];
+        LxFTPRequest *request = [LxFTPRequest uploadRequest];
         request.serverURL = [NSURL URLWithString:FTP_SCHEME_HOST]URLByAppendingPathComponent:FILE_PATH];
         request.localFileURL = [NSURL fileURLWithPath:LOCAL_FILE_SAVE_PATH];
         request.username = USERNAME;
@@ -91,7 +91,7 @@ How to use
             
 ### Create file or directory on ftp server:
 
-        LxFTPRequest * request = [LxFTPRequest createResourceRequest];
+        LxFTPRequest *request = [LxFTPRequest createResourceRequest];
         request.serverURL = [NSURL URLWithString:FTP_RESOURCE_PATH];    // directory path should be end up with '/'
         request.username = USERNAME;
         request.password = PASSWORD;
@@ -108,7 +108,7 @@ How to use
         /**
             CANNOT DELETE EMPTY DIRECTORY!!!
         */
-        LxFTPRequest * request = [LxFTPRequest destoryResourceRequest];
+        LxFTPRequest *request = [LxFTPRequest destoryResourceRequest];
         request.serverURL = [NSURL URLWithString:FTP_RESOURCE_PATH];
         request.username = USERNAME;
         request.password = PASSWORD;
