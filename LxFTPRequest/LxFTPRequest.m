@@ -135,8 +135,6 @@ static NSInteger const UPLOAD_BUFFER_SIZE = 1024;
 }
 
 - (void)stop {
-    [super stop];
-
     CFBridgingRelease(_streamClientContext.info);
     _streamClientContext.info = NULL;
 }
