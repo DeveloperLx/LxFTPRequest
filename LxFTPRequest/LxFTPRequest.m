@@ -548,6 +548,9 @@ void downloadReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType 
     CFWriteStreamClose(self.writeStream);
     CFRelease(self.writeStream);
     self.writeStream = nil;
+    
+    CFBridgingRelease(_streamClientContext.info);
+    _streamClientContext.info = NULL;
 }
 
 @end
