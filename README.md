@@ -20,7 +20,7 @@ Support
 
 Podfile
 ------------
-        pod 'LxFTPRequest', '~> 1.1.1'
+        pod 'LxFTPRequest', '~> 1.1.2'
 
 How to use
 -----------
